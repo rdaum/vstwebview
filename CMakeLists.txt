@@ -69,6 +69,8 @@ if (WIN32)
     FetchContent_Declare(wil GIT_REPOSITORY "https://github.com/microsoft/wil")
     FetchContent_MakeAvailable(wil)
 
+    include(NuGet)
+
     nuget_add(WebView2 "Microsoft.Web.WebView2" 1.0.1150.38)
     nuget_add(CppWinRT "Microsoft.Windows.CppWinRT" 2.0.220315.1)
 
