@@ -31,17 +31,16 @@ IF (WIN32)
             src/vstwebview/win32/webview_edge_chromium.cc)
 elseif (UNIX)
     if (NOT APPLE)
-        set(WEBVIEW_PLATFORM_SOURCES
-                src/vstwebview/gtk/webview_gtk.cc
-                )
+        set(WEBVIEW_PLATFORM_SOURCES src/vstwebview/gtk/webview_gtk.cc)
         find_package(PkgConfig REQUIRED)
         pkg_check_modules(GTK3 REQUIRED gtk+-3.0)
         pkg_check_modules(GTKMM3 REQUIRED gtkmm-3.0)
         pkg_check_modules(WEBKIT2GTK REQUIRED webkit2gtk-4.1)
-        # TODO else for APPLE here
+    else()
+        # TODO any package checking for OSX
+        set(WEBVIEW_PLATFORM_SOURCES src/vstwebview/osx/webview_osx.mm)
     endif ()
 endif ()
-
 
 add_library(vstwebview
         ${WEBVIEW_PLATFORM_SOURCES}
@@ -82,7 +81,8 @@ elseif(UNIX)
     if (NOT APPLE)
         target_include_directories(vstwebview PRIVATE ${GTK3_INCLUDE_DIRS} ${WEBKIT2GTK_INCLUDE_DIRS} ${GTKMM3_INCLUDE_DIRS})
         target_link_libraries(vstwebview PRIVATE ${GTK3_LIBRARIES} ${WEBKIT2GTK_LIBRARIES} ${GTKMM3_LIBRARIES})
-    # TODO else for APPLE here
+    else()
+        # TODO includes and libraries for OS X
     endif()
 endif ()
 
