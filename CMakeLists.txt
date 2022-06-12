@@ -29,13 +29,17 @@ FetchContent_MakeAvailable(json)
 
 smtg_enable_vst3_sdk()
 
-# Platform specific sources.
+# Platform specific sources and compile options.
 IF (WIN32)
     set(WEBVIEW_PLATFORM_SOURCES
             src/vstwebview/win32/webview_win32.h
             src/vstwebview/win32/webview_win32.cc
             src/vstwebview/win32/webview_edge_chromium.h
             src/vstwebview/win32/webview_edge_chromium.cc)
+
+    # Needed to shut MSVC up about experimental/coroutine and experimental/resumable even though
+    # we are not directly using them and they're coming through somehow from Edge
+    add_compile_options(/await)
 elseif (UNIX)
     if (NOT APPLE)
         set(WEBVIEW_PLATFORM_SOURCES src/vstwebview/gtk/webview_gtk.cc)
