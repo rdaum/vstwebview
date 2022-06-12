@@ -5,6 +5,8 @@ set(ABSL_PROPAGATE_CXX_STD ON)
 
 project(vstwebview)
 
+include_directories(cmake)
+
 # Third party packages are pulled in via FetchContent
 include(FetchContent)
 
