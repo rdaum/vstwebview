@@ -1,8 +1,18 @@
 # vstwebview
 
-Allows construction of VST3 user interfaces in an embedded webview using HTML/CSS/JavaScript instead of the VSTGUI
-framework.
+This package allows one to write of VST3 plugin user interfaces using an an embedded webview using HTML/CSS/JavaScript 
+instead of the VSTGUI framework. 
 
-Implementations for Win32 using Edge/Chromium and Linux (using webkit2 GTK).
+It includes JS binding facilities for piping EditController functionality through to the web layer. 
 
-More documentation coming soon.
+Implementations exist for all 3 supported VST3 SDK platform:
+  * Win32 using Edge/Chromium 
+  * Linux (using webkit2 GTK 4.1)
+  * and OS X (embedded Safari/WebKit)
+
+In the demo/ directory I have ported the 'panner' VST3 sample VST as a very minimal and ugly example of how things work.
+
+More elaborate UIs will generally require a JS framework of some kind, which generally will involve integrating NPM, 
+etc. into your build. I will leave this as an exercise to the reader.
+
+This is still a bit early and rough. Contributions and testing welcome.
