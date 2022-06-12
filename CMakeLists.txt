@@ -86,3 +86,7 @@ elseif(UNIX)
     endif()
 endif ()
 
+option(BUILD_DEMO "Build demos" OFF)
+if(BUILD_DEMO)
+    add_subdirectory(demo/panner)
+endif()

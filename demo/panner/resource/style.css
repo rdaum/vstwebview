@@ -1,0 +1,8 @@
+body {
+    background-image: url("background.png");
+    background-color: #cccccc;
+}
+
+.fields {
+    float: right;
+}
