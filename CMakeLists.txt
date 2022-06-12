@@ -8,6 +8,11 @@ project(vstwebview)
 # Third party packages are pulled in via FetchContent
 include(FetchContent)
 
+# We don't want VSTGUI to bloat the binary.
+set(SMTG_ADD_VSTGUI OFF)
+set(SMTG_ADD_VST3_PLUGINS_SAMPLES OFF)
+set(SMTG_ADD_VST3_HOSTING_SAMPLES OFF)
+
 # VST3SDK
 FetchContent_Declare(
         vst3sdk

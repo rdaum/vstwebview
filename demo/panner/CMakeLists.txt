@@ -22,8 +22,11 @@ set(BUILD_SHARED_LIBS FALSE)
 # Abseil link on Linux will fail without this.
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
-if (UNIX AND NOT APPLE)
-    set(PLATFORM_LIBRARIES tbb)
+if (UNIX)
+    add_compile_options(-Wno-suggest-override)
+    if (NOT APPLE)
+        set(PLATFORM_LIBRARIES tbb)
+    endif()
 endif()
 
 smtg_enable_vst3_sdk()
