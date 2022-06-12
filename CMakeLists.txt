@@ -34,7 +34,6 @@ elseif (UNIX)
         set(WEBVIEW_PLATFORM_SOURCES src/vstwebview/gtk/webview_gtk.cc)
         find_package(PkgConfig REQUIRED)
         pkg_check_modules(GTK3 REQUIRED gtk+-3.0)
-        pkg_check_modules(GTKMM3 REQUIRED gtkmm-3.0)
         pkg_check_modules(WEBKIT2GTK REQUIRED webkit2gtk-4.1)
     else()
         # TODO any package checking for OSX
