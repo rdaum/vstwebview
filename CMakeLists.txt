@@ -37,6 +37,7 @@ elseif (UNIX)
         pkg_check_modules(WEBKIT2GTK REQUIRED webkit2gtk-4.1)
     else()
         # TODO any package checking for OSX
+        add_compile_options(-Wno-suggest-override)
         set(WEBVIEW_PLATFORM_SOURCES src/vstwebview/osx/webview_osx.mm)
     endif ()
 endif ()
