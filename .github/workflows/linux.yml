@@ -17,8 +17,11 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
+    - name: Update packages
+      run: sudo apt-get update
+
     - name: Install prerequisites
-      run: sudo apt-get install -y libwebkit2gtk-4.1-dev libxcb-util-dev libxcb-cursor-dev libgtk-3-dev
+      run: sudo apt-get install -y libwebkit2gtk-4.1-dev libxcb-util-dev libxcb-cursor-dev libgtk-3-dev libxcb-keysyms1-dev
 
     - name: Configure CMake
       run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
