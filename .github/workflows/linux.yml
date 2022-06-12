@@ -12,13 +12,13 @@ env:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
 
     steps:
     - uses: actions/checkout@v3
 
     - name: Install prerequisites
-      run: sudo apt-get install -y libwebkit2gtk-4.0.37-dev libxcb-util-dev
+      run: sudo apt-get install -y libwebkit2gtk-4.1-dev libxcb-util-dev
 
     - name: Configure CMake
       run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
