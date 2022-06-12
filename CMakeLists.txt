@@ -5,7 +5,7 @@ set(ABSL_PROPAGATE_CXX_STD ON)
 
 project(vstwebview)
 
-include_directories(cmake)
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake")
 
 # Third party packages are pulled in via FetchContent
 include(FetchContent)
