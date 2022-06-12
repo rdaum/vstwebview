@@ -95,7 +95,7 @@ elseif(UNIX)
         target_include_directories(vstwebview PRIVATE ${GTK3_INCLUDE_DIRS} ${WEBKIT2GTK_INCLUDE_DIRS} ${GTKMM3_INCLUDE_DIRS})
         target_link_libraries(vstwebview PRIVATE ${GTK3_LIBRARIES} ${WEBKIT2GTK_LIBRARIES} ${GTKMM3_LIBRARIES})
     else()
-        # TODO includes and libraries for OS X
+        target_link_libraries(vstwebview "-framework Foundation")
     endif()
 endif ()
 
