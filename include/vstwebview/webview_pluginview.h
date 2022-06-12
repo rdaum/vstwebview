@@ -30,9 +30,14 @@ namespace vstwebview {
 
 class WebviewControllerBindings;
 
+/**
+ * An implementation of the VST3 EditorView which delegates all UI functionality
+ * through to a platform webview.
+ */
 class WebviewPluginView : public Steinberg::Vst::EditorView {
  public:
   WebviewPluginView(Steinberg::Vst::EditController *controller,
+                    const std::string &title,
                     const std::vector<vstwebview::Bindings *> &bindings,
                     Steinberg::ViewRect *size = nullptr);
 
@@ -50,6 +55,7 @@ class WebviewPluginView : public Steinberg::Vst::EditorView {
 
  private:
   std::mutex webview_mutex_;
+  const std::string &title_;
   std::unique_ptr<vstwebview::Webview> webview_handle_;
   std::vector<vstwebview::Bindings *> bindings_;
 };

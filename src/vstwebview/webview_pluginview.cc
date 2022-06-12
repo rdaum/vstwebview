@@ -20,9 +20,11 @@ namespace vstwebview {
 
 WebviewPluginView::WebviewPluginView(
     Steinberg::Vst::EditController *controller,
+    const std::string &title,
     const std::vector<vstwebview::Bindings *> &bindings,
     Steinberg::ViewRect *size)
-    : Steinberg::Vst::EditorView(controller, size), bindings_(bindings) {}
+    : Steinberg::Vst::EditorView(controller, size), title_(title),
+      bindings_(bindings) {}
 
 Steinberg::tresult WebviewPluginView::isPlatformTypeSupported(
     Steinberg::FIDString type) {
@@ -46,7 +48,7 @@ void WebviewPluginView::attachedToParent() {
       for (auto binding : bindings_) {
         binding->Bind(webview);
       }
-      webview->SetTitle("Sidebands VST Webview");
+      webview->SetTitle(title_);
       webview->SetViewSize(rect.getWidth(), rect.getHeight(),
                            vstwebview::Webview::SizeHint::kFixed);
 

@@ -55,7 +55,7 @@ json SerializeParameter(Steinberg::Vst::Parameter *param) {
 
 // Proxy IDependent through the webview for parameter object changes.
 class ParameterDependenciesProxy : public Steinberg::FObject {
- public:
+public:
   explicit ParameterDependenciesProxy(vstwebview::Webview *webview)
       : webview_(webview) {}
 
@@ -73,75 +73,11 @@ class ParameterDependenciesProxy : public Steinberg::FObject {
                      [](const json &r) {});
   }
 
- private:
+private:
   vstwebview::Webview *webview_;
 };
 
 }  // namespace
-
-void WebviewMessageListener::Subscribe(
-    const std::string &receiver, const std::string &message_id,
-    const std::vector<MessageAttribute> &attributes) {
-  subscriptions_[message_id] = {message_id, attributes, receiver};
-}
-
-json WebviewMessageListener::SerializeMessage(
-    Steinberg::Vst::IMessage *message,
-    const WebviewMessageListener::MessageDescriptor &descriptor) {
-  auto attributes = message->getAttributes();
-
-  json j = {{"messageId", message->getMessageID()}};
-  for (const auto &attr : descriptor.attributes) {
-    switch (attr.type) {
-      case MessageAttribute::Type::INT:
-        Steinberg::int64 i;
-        if (attributes->getInt(attr.name.c_str(), i) ==
-            Steinberg::kResultTrue) {
-          j[attr.name] = i;
-        }
-        break;
-      case MessageAttribute::Type::FLOAT:
-        double f;
-        if (attributes->getFloat(attr.name.c_str(), f) ==
-            Steinberg::kResultTrue) {
-          j[attr.name] = f;
-        }
-        break;
-      case MessageAttribute::Type::STRING:
-        Steinberg::Vst::TChar str[128];
-        if (attributes->getString(attr.name.c_str(), str,
-                                  128 * sizeof(Steinberg::Vst::TChar)) ==
-            Steinberg::kResultTrue) {
-          j[attr.name] = str;
-        }
-        break;
-      case MessageAttribute::Type::BINARY:
-        const void *addr;
-        Steinberg::uint32 size;
-        if (attributes->getBinary(attr.name.c_str(), addr, size) ==
-            Steinberg::kResultTrue) {
-          std::vector<double> data(size / sizeof(double));
-          std::memcpy(data.data(), addr, size);
-          j[attr.name] = data;
-        }
-        break;
-    }
-  }
-  return j;
-}
-
-Steinberg::tresult WebviewMessageListener::Notify(
-    Steinberg::Vst::IMessage *message) {
-  auto *msg_id = message->getMessageID();
-
-  const auto &it = subscriptions_.find(msg_id);
-  if (it == subscriptions_.end()) return Steinberg::kResultFalse;
-
-  auto json = SerializeMessage(message, it->second.descriptor);
-  auto send_message_js = it->second.notify_function + "(" + json.dump() + ");";
-  webview_->EvalJS(send_message_js, [](const nlohmann::json &res) {});
-  return Steinberg::kResultOk;
-}
 
 WebviewControllerBindings::WebviewControllerBindings(
     Steinberg::Vst::EditControllerEx1 *controller)

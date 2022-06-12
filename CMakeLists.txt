@@ -21,28 +21,32 @@ FetchContent_Declare(json URL https://github.com/nlohmann/json/releases/download
 FetchContent_MakeAvailable(json)
 
 smtg_enable_vst3_sdk()
+
+# Platform specific sources.
 IF (WIN32)
     set(WEBVIEW_PLATFORM_SOURCES
             src/vstwebview/win32/webview_win32.h
-           src/vstwebview/win32/webview_win32.cc
-           src/vstwebview/win32/webview_edge_chromium.h
-           src/vstwebview/win32/webview_edge_chromium.cc)
-ENDIF()
-
-if(UNIX AND NOT APPLE)
-    set(WEBVIEW_PLATFORM_SOURCES
-           src/vstwebview/gtk/webview_gtk.cc
-            )
-    find_package(PkgConfig REQUIRED)
-    pkg_check_modules(GTK3 REQUIRED gtk+-3.0)
-    pkg_check_modules(GTKMM3 REQUIRED gtkmm-3.0)
-    pkg_check_modules(WEBKIT2GTK REQUIRED webkit2gtk-4.1)
-endif()
+            src/vstwebview/win32/webview_win32.cc
+            src/vstwebview/win32/webview_edge_chromium.h
+            src/vstwebview/win32/webview_edge_chromium.cc)
+elseif (UNIX)
+    if (NOT APPLE)
+        set(WEBVIEW_PLATFORM_SOURCES
+                src/vstwebview/gtk/webview_gtk.cc
+                )
+        find_package(PkgConfig REQUIRED)
+        pkg_check_modules(GTK3 REQUIRED gtk+-3.0)
+        pkg_check_modules(GTKMM3 REQUIRED gtkmm-3.0)
+        pkg_check_modules(WEBKIT2GTK REQUIRED webkit2gtk-4.1)
+        # TODO else for APPLE here
+    endif ()
+endif ()
 
 
 add_library(vstwebview
         ${WEBVIEW_PLATFORM_SOURCES}
         src/vstwebview/webview_controller_bindings.cc
+        src/vstwebview/webview_message_listener.cc
         src/vstwebview/webview_pluginview.cc
         src/vstwebview/webview.cc)
 
@@ -55,7 +59,7 @@ add_dependencies(vstwebview nlohmann_json::nlohmann_json)
 # Needed for webview2.h & friends on Win32.
 if (WIN32)
     option(WIL_BUILD_PACKAGING "" OFF)
-    option(WIL_BUILD_TESTS  "" OFF)
+    option(WIL_BUILD_TESTS "" OFF)
     FetchContent_Declare(wil GIT_REPOSITORY "https://github.com/microsoft/wil")
     FetchContent_MakeAvailable(wil)
 
@@ -65,16 +69,20 @@ if (WIN32)
     target_compile_definitions(vstwebview PRIVATE UNICODE=1 _UNICODE=1)
     target_include_directories(vstwebview PRIVATE ${WebView2_PATH}/build/native/include)
 
-    if(CMAKE_SIZEOF_VOID_P EQUAL 8)
+    if (CMAKE_SIZEOF_VOID_P EQUAL 8)
         target_link_libraries(vstwebview PRIVATE ${WebView2_PATH}/build/native/x64/WebView2LoaderStatic.lib)
-    else()
+    else ()
         target_link_libraries(vstwebview PRIVATE ${WebView2_PATH}/build/native/x86/WebView2LoaderStatic.lib)
-    endif()
+    endif ()
 
     target_link_libraries(vstwebview PRIVATE WIL::WIL Dwmapi Shlwapi)
-endif()
+elseif(UNIX)
 
-if(UNIX AND NOT APPLE)
-    target_include_directories(vstwebview PRIVATE ${GTK3_INCLUDE_DIRS} ${WEBKIT2GTK_INCLUDE_DIRS} ${GTKMM3_INCLUDE_DIRS})
-    target_link_libraries(vstwebview PRIVATE ${GTK3_LIBRARIES} ${WEBKIT2GTK_LIBRARIES} ${GTKMM3_LIBRARIES})
-endif()
+    # GTK on Linux
+    if (NOT APPLE)
+        target_include_directories(vstwebview PRIVATE ${GTK3_INCLUDE_DIRS} ${WEBKIT2GTK_INCLUDE_DIRS} ${GTKMM3_INCLUDE_DIRS})
+        target_link_libraries(vstwebview PRIVATE ${GTK3_LIBRARIES} ${WEBKIT2GTK_LIBRARIES} ${GTKMM3_LIBRARIES})
+    # TODO else for APPLE here
+    endif()
+endif ()
+

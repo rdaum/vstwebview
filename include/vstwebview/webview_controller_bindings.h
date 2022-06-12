@@ -28,7 +28,10 @@ using nlohmann::json;
 
 namespace vstwebview {
 
-class WebviewMessageListener;
+/**
+ * Implementation of JS bindings for proxying the functionality of the VST3
+ * EditController through to the webview.
+ */
 class WebviewControllerBindings : public vstwebview::Bindings {
  public:
   explicit WebviewControllerBindings(
@@ -65,40 +68,6 @@ class WebviewControllerBindings : public vstwebview::Bindings {
       bindings_;
   std::unique_ptr<Steinberg::IDependent> param_dep_proxy_;
   Steinberg::Vst::EditControllerEx1 *controller_;
-};
-
-class WebviewMessageListener {
- public:
-  struct MessageAttribute {
-    std::string name;
-    enum class Type { INT, FLOAT, STRING, BINARY };
-    Type type;
-  };
-
-  explicit WebviewMessageListener(vstwebview::Webview *webview)
-      : webview_(webview) {}
-
-  void Subscribe(const std::string &receiver, const std::string &message_id,
-                 const std::vector<MessageAttribute> &attributes);
-
-  Steinberg::tresult Notify(Steinberg::Vst::IMessage *message);
-
- private:
-  struct MessageDescriptor {
-    std::string message_id;
-    std::vector<MessageAttribute> attributes;
-  };
-
-  struct MessageSubscription {
-    MessageDescriptor descriptor;
-    std::string notify_function;
-  };
-
-  json SerializeMessage(Steinberg::Vst::IMessage *message,
-                        const MessageDescriptor &descriptor);
-
-  std::unordered_map<std::string, MessageSubscription> subscriptions_;
-  vstwebview::Webview *webview_;
 };
 
 }  // namespace vstwebview
