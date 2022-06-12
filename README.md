@@ -1,9 +1,11 @@
 # vstwebview
 
-This package allows one to write VST3 plugin user interfaces using an an embedded webview, allowing HTML/CSS/JavaScript 
+This package allows one to write VST3 plugin user interfaces using an embedded webview, allowing HTML/CSS/JavaScript 
 UIs instead of Steinberg's bespoke VSTGUI framework. 
 
 It includes JS binding facilities for piping EditController functionality through to the web layer. 
+
+So: Build your plugin in C++, and then use vstwebview to write your UI layer.
 
 ## Why?
 
@@ -22,7 +24,8 @@ Using an embedded webview is:
   * Standard / lots of people know it
   * Plenty of JS etc. framework options
   * Actually supports accessibility.
-  * ... In my past life @ Google, I worked a bit in the Chromium codebase and I've seen how the sausage is made. I personally think the browser tech is solid.
+
+(aside ... In my past life @ Google, I worked a bit in the Chromium codebase and I've seen how the sausage is made. I personally think browser tech is solid miracle engineering at this point.)
 
 Implementations exist for all 3 supported VST3 SDK platform:
   * Win32 using Edge/Chromium 
