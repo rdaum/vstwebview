@@ -39,7 +39,9 @@ class WebviewPluginView : public Steinberg::Vst::EditorView {
   WebviewPluginView(Steinberg::Vst::EditController *controller,
                     const std::string &title,
                     const std::vector<vstwebview::Bindings *> &bindings,
-                    Steinberg::ViewRect *size = nullptr);
+                    Steinberg::ViewRect *size = nullptr,
+                    const std::string uri = nullptr
+                    );
 
   // EditorView overrides
   Steinberg::tresult isPlatformTypeSupported(
@@ -58,6 +60,7 @@ class WebviewPluginView : public Steinberg::Vst::EditorView {
   const std::string &title_;
   std::unique_ptr<vstwebview::Webview> webview_handle_;
   std::vector<vstwebview::Bindings *> bindings_;
+  std::string uri;
 };
 
 }  // namespace vstwebview
