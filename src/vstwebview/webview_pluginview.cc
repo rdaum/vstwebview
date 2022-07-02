@@ -23,9 +23,9 @@ WebviewPluginView::WebviewPluginView(
     const std::string &title,
     const std::vector<vstwebview::Bindings *> &bindings,
     Steinberg::ViewRect *size,
-    const std::string uri)
+    const std::string &uri)
     : Steinberg::Vst::EditorView(controller, size), title_(title),
-      bindings_(bindings) {}
+      bindings_(bindings), uri(uri) {}
 
 Steinberg::tresult WebviewPluginView::isPlatformTypeSupported(
     Steinberg::FIDString type) {
@@ -53,7 +53,7 @@ void WebviewPluginView::attachedToParent() {
       webview->SetViewSize(rect.getWidth(), rect.getHeight(),
                            vstwebview::Webview::SizeHint::kFixed);
 
-      if (uri) {
+      if (!uri.empty()) {
           webview->Navigate(uri);
       } else {
           webview->Navigate(webview->ContentRootURI() + "/index.html");
