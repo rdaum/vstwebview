@@ -59,7 +59,7 @@ class WebviewPluginView : public Steinberg::Vst::EditorView {
   const std::string &title_;
   std::unique_ptr<vstwebview::Webview> webview_handle_;
   std::vector<vstwebview::Bindings *> bindings_;
-  std::string uri;
+  std::string uri_;
 };
 
 }  // namespace vstwebview
