@@ -182,8 +182,9 @@ class WebviewOSX : public vstwebview::Webview {
          */
         return;
       } else {
-        char *value = ((char *(*)(id, SEL))objc_msgSend)(ret, "UTF8String"_sel);
-        rs(value);
+        //XXX TODO - Parse JSON correctly based on Obj-C type, using NSJSONSerialization
+        //char *value = ((char *(*)(id, SEL))objc_msgSend)(ret, "UTF8String"_sel);
+        //rs(value);
       }
     };
 
